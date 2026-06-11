@@ -254,6 +254,16 @@ export default function EnvelopeSection({ onOpen }: Props) {
         transition={{ delay: 1, duration: 0.7 }}
       >
         <ArchOrn />
+
+        {/* Floating finger icon */}
+        <motion.div
+          style={{ fontSize: "clamp(28px,8vw,38px)", lineHeight: 1, userSelect: "none" }}
+          animate={{ y: [0, -10, 0], rotate: [-8, 8, -8] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          👆
+        </motion.div>
+
         <motion.p
           style={{
             fontFamily: "var(--serif-en)",
@@ -266,7 +276,7 @@ export default function EnvelopeSection({ onOpen }: Props) {
           animate={{ opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 2.4, repeat: Infinity }}
         >
-          Touch to open
+          Tap to open
         </motion.p>
       </motion.div>
     </motion.div>
