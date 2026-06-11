@@ -42,64 +42,57 @@ export default function ScratchReveal({ onRevealed }: Props) {
         />
       ))}
 
-      {/* Tap box */}
+      {/* Click button */}
       <AnimatePresence mode="wait">
         {!tapped ? (
           <motion.div
             key="tap-box"
-            onClick={handleTap}
-            className="relative cursor-pointer select-none flex flex-col items-center justify-center rounded-2xl"
-            style={{
-              width: "min(340px, calc(100vw - 48px))",
-              height: "190px",
-              background: "linear-gradient(135deg, #C6951B 0%, #e8b84b 35%, #FFE08A 55%, #C6951B 80%, #9d750f 100%)",
-              border: "2.5px solid rgba(198,149,27,0.7)",
-              boxShadow: "0 20px 60px rgba(198,149,27,0.35), 0 4px 16px rgba(0,0,0,0.15)",
-            }}
-            initial={{ scale: 0.88, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 1.15, opacity: 0, transition: { duration: 0.45 } }}
+            className="flex flex-col items-center gap-6"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, transition: { duration: 0.35 } }}
             transition={{ duration: 0.55, ease: [0.34, 1.56, 0.64, 1] }}
-            whileTap={{ scale: 0.95 }}
           >
-            {/* Shimmer overlay */}
+            {/* Floating finger */}
             <motion.div
-              className="absolute inset-0 rounded-2xl pointer-events-none"
-              style={{ background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.28) 50%, transparent 60%)", backgroundSize: "200% 100%" }}
-              animate={{ backgroundPosition: ["200% 0", "-200% 0"] }}
-              transition={{ duration: 2.2, repeat: Infinity, ease: "linear" }}
-            />
+              style={{ fontSize: "clamp(40px,11vw,54px)", lineHeight: 1, userSelect: "none" }}
+              animate={{ y: [0, -12, 0], rotate: [-10, 10, -10] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            >
+              👆
+            </motion.div>
 
-            <motion.p
+            {/* Button */}
+            <motion.button
+              onClick={handleTap}
+              className="relative cursor-pointer select-none"
               style={{
                 fontFamily: "var(--serif-en, Georgia, serif)",
-                fontSize: "clamp(26px, 8vw, 38px)",
+                fontSize: "clamp(16px, 4.5vw, 22px)",
                 fontWeight: 700,
                 color: "#3d2804",
-                letterSpacing: "0.06em",
-                textShadow: "0 1px 0 rgba(255,255,255,0.4), 0 2px 8px rgba(0,0,0,0.18)",
-                userSelect: "none",
-              }}
-              animate={{ scale: [1, 1.04, 1] }}
-              transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-            >
-              Tap Here
-            </motion.p>
-
-            <motion.p
-              style={{
-                fontFamily: "var(--serif-en, Georgia, serif)",
-                fontSize: "clamp(12px, 3.2vw, 15px)",
-                color: "rgba(61,40,4,0.65)",
-                letterSpacing: "0.18em",
-                marginTop: "8px",
+                letterSpacing: "0.08em",
                 textTransform: "uppercase",
+                background: "linear-gradient(135deg, #C6951B 0%, #e8b84b 40%, #FFE08A 60%, #C6951B 100%)",
+                border: "none",
+                borderRadius: "8px",
+                padding: "18px 40px",
+                cursor: "pointer",
+                boxShadow: "0 8px 32px rgba(198,149,27,0.4), 0 2px 8px rgba(0,0,0,0.15)",
               }}
-              animate={{ opacity: [0.6, 1, 0.6] }}
-              transition={{ duration: 2, repeat: Infinity }}
+              animate={{
+                boxShadow: [
+                  "0 8px 32px rgba(198,149,27,0.3), 0 2px 8px rgba(0,0,0,0.15)",
+                  "0 8px 48px rgba(198,149,27,0.6), 0 2px 8px rgba(0,0,0,0.15)",
+                  "0 8px 32px rgba(198,149,27,0.3), 0 2px 8px rgba(0,0,0,0.15)",
+                ],
+              }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+              whileTap={{ scale: 0.96 }}
+              whileHover={{ scale: 1.03 }}
             >
-              to reveal your date ✨
-            </motion.p>
+              Click here to reveal date ✨
+            </motion.button>
           </motion.div>
         ) : (
           /* Date reveal */

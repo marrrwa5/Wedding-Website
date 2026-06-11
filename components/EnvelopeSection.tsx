@@ -248,7 +248,7 @@ export default function EnvelopeSection({ onOpen }: Props) {
 
       {/* ── Tap instruction ── */}
       <motion.div
-        className="mt-10 flex flex-col items-center gap-3"
+        className="mt-8 flex flex-col items-center gap-4"
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: opening ? 0 : 1, y: 0 }}
         transition={{ delay: 1, duration: 0.7 }}
@@ -257,27 +257,43 @@ export default function EnvelopeSection({ onOpen }: Props) {
 
         {/* Floating finger icon */}
         <motion.div
-          style={{ fontSize: "clamp(28px,8vw,38px)", lineHeight: 1, userSelect: "none" }}
-          animate={{ y: [0, -10, 0], rotate: [-8, 8, -8] }}
+          style={{ fontSize: "clamp(36px,10vw,50px)", lineHeight: 1, userSelect: "none" }}
+          animate={{ y: [0, -12, 0], rotate: [-10, 10, -10] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
         >
           👆
         </motion.div>
 
-        <motion.p
+        {/* Click here button */}
+        <motion.button
+          onClick={handleOpen}
           style={{
             fontFamily: "var(--serif-en)",
-            fontSize: "clamp(13px,3.5vw,16px)",
-            color: "rgba(232,197,71,0.8)",
-            letterSpacing: "0.18em",
+            fontSize: "clamp(13px,3.8vw,17px)",
+            fontWeight: 600,
+            color: "#C6951B",
+            letterSpacing: "0.2em",
             textTransform: "uppercase",
-            fontStyle: "italic",
+            background: "transparent",
+            border: "1.5px solid rgba(198,149,27,0.55)",
+            borderRadius: "4px",
+            padding: "10px 28px",
+            cursor: "pointer",
+            userSelect: "none",
           }}
-          animate={{ opacity: [0.6, 1, 0.6] }}
-          transition={{ duration: 2.4, repeat: Infinity }}
+          animate={{
+            boxShadow: [
+              "0 0 0px rgba(198,149,27,0)",
+              "0 0 18px rgba(198,149,27,0.35)",
+              "0 0 0px rgba(198,149,27,0)",
+            ],
+            borderColor: ["rgba(198,149,27,0.4)", "rgba(198,149,27,0.9)", "rgba(198,149,27,0.4)"],
+          }}
+          transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+          whileTap={{ scale: 0.96 }}
         >
-          Tap to open
-        </motion.p>
+          Click here to see invitation
+        </motion.button>
       </motion.div>
     </motion.div>
   );
