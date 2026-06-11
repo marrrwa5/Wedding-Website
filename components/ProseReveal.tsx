@@ -71,21 +71,21 @@ const SPARKLES = [
 function FireBurst({ delay = 0, started }: { delay?: number; started: boolean }) {
   const angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330];
   return (
-    <motion.svg width="54" height="54" viewBox="0 0 54 54" fill="none"
+    <motion.svg width="34" height="34" viewBox="0 0 54 54" fill="none"
       initial={{ opacity: 0, scale: 0.2 }}
-      animate={started ? { opacity: [0, 1, 1, 0], scale: [0.2, 1.3, 1.1, 0.7] } : { opacity: 0 }}
+      animate={started ? { opacity: [0, 1, 1, 0], scale: [0.2, 1.1, 0.9, 0.6] } : { opacity: 0 }}
       transition={{ delay, duration: 2.8, repeat: Infinity, repeatDelay: 12 + delay, ease: "easeOut" }}
     >
       {angles.map(a => (
         <line key={a}
           x1="27" y1="27"
-          x2={27 + Math.cos(a * Math.PI / 180) * 20}
-          y2={27 + Math.sin(a * Math.PI / 180) * 20}
+          x2={27 + Math.cos(a * Math.PI / 180) * 13}
+          y2={27 + Math.sin(a * Math.PI / 180) * 13}
           stroke="rgba(232,197,71,0.8)" strokeWidth="1.3" strokeLinecap="round"
         />
       ))}
-      <circle cx="27" cy="27" r="3.5" fill="rgba(255,240,160,0.98)" />
-      <circle cx="27" cy="27" r="6" fill="none" stroke="rgba(232,197,71,0.3)" strokeWidth="1" />
+      <circle cx="27" cy="27" r="2.5" fill="rgba(255,240,160,0.98)" />
+      <circle cx="27" cy="27" r="4" fill="none" stroke="rgba(232,197,71,0.3)" strokeWidth="1" />
     </motion.svg>
   );
 }
@@ -253,7 +253,7 @@ export default function ProseReveal({ onDone, show }: Props) {
     fontFamily: "var(--font-playfair), 'Playfair Display', serif",
     fontStyle: "italic",
     fontWeight: 400,
-    fontSize: "clamp(20px, 5.5vw, 26px)",
+    fontSize: "clamp(17px, 4.5vw, 22px)",
     lineHeight: 1.9,
     letterSpacing: "0.012em",
     textAlign: "center",
@@ -321,12 +321,9 @@ export default function ProseReveal({ onDone, show }: Props) {
 
       {/* ── Firecracker bursts — pulled in from edges ── */}
       {[
-        { style: { left: "8%",  top: "18%" },                      delay: 0.4 },
-        { style: { right: "8%", top: "18%" },                      delay: 2.1 },
-        { style: { left: "8%",  bottom: "18%" },                   delay: 3.8 },
-        { style: { right: "8%", bottom: "18%" },                   delay: 1.3 },
-        { style: { left: "9%",  top: "50%", marginTop: "-27px" },  delay: 5.0 },
-        { style: { right: "9%", top: "50%", marginTop: "-27px" },  delay: 2.7 },
+        { style: { left: "8%",  top: "18%" }, delay: 0.4 },
+        { style: { right: "8%", top: "18%" }, delay: 2.1 },
+        { style: { left: "8%",  bottom: "18%" }, delay: 3.8 },
       ].map((b, i) => (
         <motion.div key={i} className="absolute pointer-events-none" style={b.style}
           animate={{ y: [-5, 5, -5], x: [-3, 3, -3] }}
@@ -370,7 +367,7 @@ export default function ProseReveal({ onDone, show }: Props) {
         >
           <p style={{
             fontFamily: "KanzAlMarjaan, AlKanz, Georgia, serif",
-            fontSize: "clamp(18px,5vw,28px)",
+            fontSize: "clamp(15px,4vw,23px)",
             color: "rgba(232,197,71,1)",
             letterSpacing: "0.12em",
             whiteSpace: "nowrap",
