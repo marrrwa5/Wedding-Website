@@ -117,6 +117,24 @@ body {
 .font-en  { font-family: var(--serif-en); }
 .font-ar  { font-family: var(--serif-ar); }
 
+/* Gold shimmer text — used on date reveal elements */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--gold-deep) 0%,
+    var(--gold-sheen) 25%,
+    var(--gold-warm) 40%,
+    var(--gold-sheen) 55%,
+    var(--gold-deep) 80%,
+    var(--gold-light) 100%
+  );
+  background-size: 300% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmerLoop 4s linear infinite;
+}
+
 /* Gold shimmer — plays N times via inline style */
 .shimmer-gold {
   background: linear-gradient(

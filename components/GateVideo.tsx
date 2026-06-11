@@ -45,7 +45,7 @@ export default function GateVideo({ onDone }: Props) {
     >
       <video
         ref={ref}
-        src="/Final_Gate2.mov"
+        src="/Final_Gate.mp4"
         muted
         playsInline
         preload="auto"
