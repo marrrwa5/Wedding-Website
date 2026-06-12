@@ -377,10 +377,10 @@ export default function ProseReveal({ onDone, show }: Props) {
         {/* 2026 image — divider between couplets */}
         <motion.div
           className="flex items-center justify-center my-6"
-          initial={{ opacity: 0, scale: 0.8 }}
+          initial={{ opacity: 0, scale: 0.92 }}
           animate={showDiv
-            ? { opacity: 1, scale: 1, transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] } }
-            : { opacity: 0, scale: 0.8 }}
+            ? { opacity: 0.68, scale: 1, transition: { duration: 1.8, ease: [0.22, 1, 0.36, 1] } }
+            : { opacity: 0, scale: 0.92 }}
         >
           <div style={{ flex: 1, height: "0.5px", background: "linear-gradient(to right,transparent,rgba(255,235,180,0.45))" }} />
           <motion.div
