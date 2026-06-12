@@ -160,110 +160,115 @@ function ScratchCard({ onDone: _onDone }: { onDone: () => void }) {
   return (
     <div style={{ textAlign: "center" }}>
 
-      {/* Save the Date label — fades out on reveal */}
-      <AnimatePresence>
-        {!revealed && (
-          <motion.div
-            exit={{ opacity: 0, transition: { duration: 0.3 } }}
-            style={{ marginBottom: "16px" }}
-          >
-            <p style={{
-              fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
-              fontSize:      "clamp(12px,3vw,16px)",
-              fontWeight:    500,
-              letterSpacing: "0.36em",
-              textTransform: "uppercase",
-              color:         "rgba(185,140,28,0.92)",
-              lineHeight:    1,
-            }}>Save the Date</p>
-            <div style={{
-              width: "40px", height: "1px",
-              background: "linear-gradient(to right,transparent,rgba(232,197,71,0.4),transparent)",
-              margin: "8px auto 0",
-            }} />
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Label stays in DOM so its height is preserved — no layout shift on reveal */}
+      <div style={{
+        marginBottom:  "16px",
+        opacity:       revealed ? 0 : 1,
+        visibility:    revealed ? "hidden" : "visible",
+        transition:    "opacity 0.3s ease",
+        pointerEvents: "none",
+      }}>
+        <p style={{
+          fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
+          fontSize:      "clamp(12px,3vw,16px)",
+          fontWeight:    500,
+          letterSpacing: "0.36em",
+          textTransform: "uppercase",
+          color:         "rgba(185,140,28,0.92)",
+          lineHeight:    1,
+          margin:        0,
+        }}>Save the Date</p>
+        <div style={{
+          width:      "40px",
+          height:     "1px",
+          background: "linear-gradient(to right,transparent,rgba(232,197,71,0.4),transparent)",
+          margin:     "8px auto 0",
+        }} />
+      </div>
 
-      {/* Click button → revealed date */}
-      <AnimatePresence mode="wait">
-        {!revealed ? (
-          <motion.div
-            key="click-box"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{
-              opacity:   1,
-              scale:     1,
-              boxShadow: [
-                "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
-                "0 0 0 1px rgba(198,149,27,0.08),0 8px 40px rgba(198,149,27,0.6)",
-                "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
-              ],
-            }}
-            exit={{ scale: 1.08, opacity: 0, transition: { duration: 0.25 } }}
-            transition={{
-              opacity:   { duration: 0.4 },
-              scale:     { duration: 0.4 },
-              boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-            }}
-          >
-            <button
-              onClick={handleClick}
+      {/* Fixed-height container — button and date are both 50 px tall, no shift */}
+      <div style={{ position: "relative", width: "min(210px,calc(100vw - 48px))", height: "50px", margin: "0 auto" }}>
+        <AnimatePresence mode="wait">
+          {!revealed ? (
+            <motion.div
+              key="click-box"
+              style={{ position: "absolute", inset: 0, background: "transparent" }}
+              initial={{ opacity: 0 }}
+              animate={{
+                opacity:   1,
+                boxShadow: [
+                  "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
+                  "0 0 0 1px rgba(198,149,27,0.08),0 8px 40px rgba(198,149,27,0.6)",
+                  "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
+                ],
+              }}
+              exit={{ opacity: 0, transition: { duration: 0.25 } }}
+              transition={{
+                opacity:   { duration: 0.4 },
+                boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+              }}
+            >
+              <button
+                onClick={handleClick}
+                style={{
+                  width:             "100%",
+                  height:            "100%",
+                  borderRadius:      "25px",
+                  display:           "flex",
+                  alignItems:        "center",
+                  justifyContent:    "center",
+                  cursor:            "pointer",
+                  /* strip all browser-default button paint */
+                  appearance:        "none",
+                  WebkitAppearance:  "none",
+                  background:        "linear-gradient(135deg,#C6951B 0%,#e8b84b 35%,#FFE08A 55%,#C6951B 100%)",
+                  border:            "1px solid rgba(198,149,27,0.7)",
+                  userSelect:        "none",
+                  touchAction:       "manipulation",
+                }}
+              >
+                <span style={{
+                  fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
+                  fontSize:      "clamp(11px,3vw,14px)",
+                  fontWeight:    700,
+                  letterSpacing: "0.08em",
+                  color:         "#3d2804",
+                  userSelect:    "none",
+                }}>Click To Reveal The Date</span>
+              </button>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="date-revealed"
               style={{
-                width:          "min(210px,calc(100vw - 48px))",
-                height:         "50px",
+                position:       "absolute",
+                inset:          0,
                 borderRadius:   "25px",
+                border:         "1px solid rgba(198,149,27,0.35)",
+                boxShadow:      "0 0 0 1px rgba(198,149,27,0.08),0 12px 36px rgba(0,0,0,0.48)",
                 display:        "flex",
                 alignItems:     "center",
                 justifyContent: "center",
-                cursor:         "pointer",
-                background:     "linear-gradient(135deg,#C6951B 0%,#e8b84b 35%,#FFE08A 55%,#C6951B 100%)",
-                border:         "1px solid rgba(198,149,27,0.7)",
-                userSelect:     "none",
-                touchAction:    "manipulation",
+                background:     "linear-gradient(160deg,#2D0A0A 0%,#5C1212 55%,#2D0A0A 100%)",
               }}
+              /* pure opacity — date appears exactly where button was, zero movement */
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.45, ease: "easeOut" }}
             >
-              <span style={{
+              <p style={{
                 fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
-                fontSize:      "clamp(11px,3vw,14px)",
+                fontSize:      "clamp(13px,3.8vw,18px)",
                 fontWeight:    700,
-                letterSpacing: "0.08em",
-                color:         "#3d2804",
-                userSelect:    "none",
-              }}>Click To Reveal The Date</span>
-            </button>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="date-revealed"
-            style={{
-              width:          "min(210px,calc(100vw - 48px))",
-              height:         "50px",
-              borderRadius:   "25px",
-              margin:         "0 auto",
-              border:         "1px solid rgba(198,149,27,0.35)",
-              boxShadow:      "0 0 0 1px rgba(198,149,27,0.08),0 12px 36px rgba(0,0,0,0.48)",
-              display:        "flex",
-              alignItems:     "center",
-              justifyContent: "center",
-              background:     "linear-gradient(160deg,#2D0A0A 0%,#5C1212 55%,#2D0A0A 100%)",
-            }}
-            initial={{ scale: 0.85, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-          >
-            <p style={{
-              fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
-              fontSize:      "clamp(13px,3.8vw,18px)",
-              fontWeight:    700,
-              letterSpacing: "0.1em",
-              lineHeight:    1,
-              color:         "#E8C547",
-              margin:        0,
-            }}>25 November 2026</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                letterSpacing: "0.1em",
+                lineHeight:    1,
+                color:         "#E8C547",
+                margin:        0,
+              }}>25 November 2026</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
