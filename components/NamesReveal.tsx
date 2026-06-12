@@ -228,7 +228,7 @@ function ScratchCard({ onDone: _onDone }: { onDone: () => void }) {
               letterSpacing: "0.08em",
               color:         "#3d2804",
               userSelect:    "none",
-            }}>Click to reveal the date ✨</span>
+            }}>Click To Reveal The Date</span>
           </motion.button>
         ) : (
           <motion.div

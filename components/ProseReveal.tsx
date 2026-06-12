@@ -333,26 +333,6 @@ export default function ProseReveal({ onDone, show }: Props) {
         </motion.div>
       ))}
 
-      {/* ── 2026 image — top left ── */}
-      <motion.div className="absolute pointer-events-none" style={{ left: "10%", top: "10%" }}
-        initial={{ opacity: 0 }} animate={started ? { opacity: 1 } : { opacity: 0 }}
-        transition={{ delay: 0.6, duration: 1.4 }}
-      >
-        <motion.div
-          animate={{
-            scale: [1, 1.04, 1],
-            filter: [
-              "drop-shadow(0 0 2px rgba(232,197,71,0.3)) drop-shadow(0 0 5px rgba(232,197,71,0.12))",
-              "drop-shadow(0 0 5px rgba(232,197,71,0.5)) drop-shadow(0 0 10px rgba(232,197,71,0.22))",
-              "drop-shadow(0 0 2px rgba(232,197,71,0.3)) drop-shadow(0 0 5px rgba(232,197,71,0.12))",
-            ],
-          }}
-          transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <Image src="/images/2026.png" alt="2026" width={72} height={40}
-            style={{ width: "min(72px, 16vw)", height: "auto", objectFit: "contain" }} />
-        </motion.div>
-      </motion.div>
 
       {/* ── Content ── */}
       <div className="relative z-10 w-full px-4 text-center"
@@ -394,14 +374,31 @@ export default function ProseReveal({ onDone, show }: Props) {
           {[0, 1, 2, 3].map((li, idx) => renderLine(li, idx % 2 !== 0))}
         </div>
 
-        {/* Diamond rule */}
+        {/* 2026 image — divider between couplets */}
         <motion.div
-          initial={{ opacity: 0, scaleX: 0.15 }}
+          className="flex items-center justify-center my-6"
+          initial={{ opacity: 0, scale: 0.8 }}
           animate={showDiv
-            ? { opacity: 1, scaleX: 1, transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] } }
-            : { opacity: 0, scaleX: 0.15 }}
+            ? { opacity: 1, scale: 1, transition: { duration: 1.0, ease: [0.22, 1, 0.36, 1] } }
+            : { opacity: 0, scale: 0.8 }}
         >
-          <DiamondRule />
+          <div style={{ flex: 1, height: "0.5px", background: "linear-gradient(to right,transparent,rgba(255,235,180,0.45))" }} />
+          <motion.div
+            style={{ margin: "0 16px", flexShrink: 0 }}
+            animate={{
+              scale: [1, 1.04, 1],
+              filter: [
+                "drop-shadow(0 0 2px rgba(232,197,71,0.3)) drop-shadow(0 0 5px rgba(232,197,71,0.12))",
+                "drop-shadow(0 0 5px rgba(232,197,71,0.5)) drop-shadow(0 0 10px rgba(232,197,71,0.22))",
+                "drop-shadow(0 0 2px rgba(232,197,71,0.3)) drop-shadow(0 0 5px rgba(232,197,71,0.12))",
+              ],
+            }}
+            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            <Image src="/images/2026.png" alt="2026" width={72} height={40}
+              style={{ width: "min(72px, 16vw)", height: "auto", objectFit: "contain" }} />
+          </motion.div>
+          <div style={{ flex: 1, height: "0.5px", background: "linear-gradient(to left,transparent,rgba(255,235,180,0.45))" }} />
         </motion.div>
 
         {/* Couplet 2 */}
