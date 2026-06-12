@@ -341,6 +341,8 @@ export default function NamesReveal() {
           <Image
             src="/images/mad.png"
             alt="" fill priority
+            sizes="100vw"
+            quality={75}
             style={{ objectFit: "cover", objectPosition: "center" }}
           />
 

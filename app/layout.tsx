@@ -61,6 +61,8 @@ export default function RootLayout({
         <link rel="preload" href="/fonts/KanzAlMarjaan.ttf" as="font" type="font/ttf" crossOrigin="anonymous" />
         {/* Preload critical first-screen video */}
         <link rel="preload" href="/images/Basmalah_Video.mp4" as="video" type="video/mp4" />
+        {/* Preload music so it's ready before JS fires */}
+        <link rel="preload" href="/music/wedding.mp4" as="audio" type="audio/mp4" />
       </head>
       <body className="min-h-full overflow-x-hidden">{children}</body>
     </html>

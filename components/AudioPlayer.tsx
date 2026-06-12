@@ -16,27 +16,28 @@ export default function AudioPlayer() {
     audio.muted = false;
     audio.play().then(() => {
       played.current = true;
-    }).catch(() => {
-      // Browser blocked autoplay — will retry on first interaction
-    });
+    }).catch(() => {});
   };
 
   useEffect(() => {
-    // Attempt immediately on mount
+    // Attempt immediately — works on desktop and some Android configs
     tryPlay();
 
-    // Fallback: start on first user interaction (covers browser autoplay blocks)
-    const onInteract = () => {
-      tryPlay();
-    };
-    document.addEventListener("click",      onInteract, { once: true });
-    document.addEventListener("touchstart", onInteract, { once: true });
-    document.addEventListener("keydown",    onInteract, { once: true });
+    // Fallback: fire on the very first user gesture, as early as possible.
+    // capture:true — intercepts before any child handler can stop propagation.
+    // passive:true on touch — never blocks scroll performance.
+    const opts = { once: true, capture: true } as const;
+    const passiveOpts = { once: true, capture: true, passive: true } as const;
+    document.addEventListener("pointerdown", tryPlay, passiveOpts);
+    document.addEventListener("touchstart",  tryPlay, passiveOpts);
+    document.addEventListener("click",       tryPlay, opts);
+    document.addEventListener("keydown",     tryPlay, opts);
 
     return () => {
-      document.removeEventListener("click",      onInteract);
-      document.removeEventListener("touchstart", onInteract);
-      document.removeEventListener("keydown",    onInteract);
+      document.removeEventListener("pointerdown", tryPlay);
+      document.removeEventListener("touchstart",  tryPlay);
+      document.removeEventListener("click",       tryPlay);
+      document.removeEventListener("keydown",     tryPlay);
     };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 

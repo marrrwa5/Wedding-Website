@@ -291,7 +291,7 @@ export default function ProseReveal({ onDone, show }: Props) {
   return (
     <motion.div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden"
-      style={{ pointerEvents: show ? "auto" : "none" }}
+      style={{ pointerEvents: show ? "auto" : "none", willChange: "opacity, transform" }}
       animate={{ opacity: show ? 1 : 0, scale: show ? 1 : 0.93 }}
       transition={{ duration: show ? 1.3 : 0, ease: [0.22, 1, 0.36, 1] }}
       exit={{ opacity: 0, y: -28, transition: { duration: 1.8, ease: "easeInOut" } }}

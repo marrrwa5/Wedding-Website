@@ -24,6 +24,8 @@ export default function Home() {
           alt=""
           fill
           priority
+          sizes="100vw"
+          quality={75}
           style={{ objectFit: "cover", objectPosition: "center" }}
         />
         <div
