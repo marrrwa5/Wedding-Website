@@ -190,16 +190,32 @@ function ScratchCard({ onDone: _onDone }: { onDone: () => void }) {
       <div style={{ position: "relative", width: "min(210px,calc(100vw - 48px))", height: "50px", margin: "0 auto" }}>
         <AnimatePresence mode="wait">
           {!revealed ? (
-            <motion.div
+            <motion.button
               key="click-box"
-              style={{ position: "absolute", inset: 0, background: "transparent" }}
+              onClick={handleClick}
+              style={{
+                position:         "absolute",
+                inset:            0,
+                borderRadius:     "25px",
+                display:          "flex",
+                alignItems:       "center",
+                justifyContent:   "center",
+                cursor:           "pointer",
+                background:       "linear-gradient(135deg,#C6951B 0%,#e8b84b 35%,#FFE08A 55%,#C6951B 100%)",
+                border:           "none",
+                outline:          "none",
+                userSelect:       "none",
+                touchAction:      "manipulation",
+                WebkitAppearance: "none",
+                appearance:       "none",
+              } as React.CSSProperties}
               initial={{ opacity: 0 }}
               animate={{
                 opacity:   1,
                 boxShadow: [
-                  "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
-                  "0 0 0 1px rgba(198,149,27,0.08),0 8px 40px rgba(198,149,27,0.6)",
-                  "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
+                  "0 8px 24px rgba(198,149,27,0.35)",
+                  "0 8px 42px rgba(198,149,27,0.65)",
+                  "0 8px 24px rgba(198,149,27,0.35)",
                 ],
               }}
               exit={{ opacity: 0, transition: { duration: 0.25 } }}
@@ -208,35 +224,15 @@ function ScratchCard({ onDone: _onDone }: { onDone: () => void }) {
                 boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
               }}
             >
-              <button
-                onClick={handleClick}
-                style={{
-                  width:             "100%",
-                  height:            "100%",
-                  borderRadius:      "25px",
-                  display:           "flex",
-                  alignItems:        "center",
-                  justifyContent:    "center",
-                  cursor:            "pointer",
-                  /* strip all browser-default button paint */
-                  appearance:        "none",
-                  WebkitAppearance:  "none",
-                  background:        "linear-gradient(135deg,#C6951B 0%,#e8b84b 35%,#FFE08A 55%,#C6951B 100%)",
-                  border:            "1px solid rgba(198,149,27,0.7)",
-                  userSelect:        "none",
-                  touchAction:       "manipulation",
-                }}
-              >
-                <span style={{
-                  fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
-                  fontSize:      "clamp(11px,3vw,14px)",
-                  fontWeight:    700,
-                  letterSpacing: "0.08em",
-                  color:         "#3d2804",
-                  userSelect:    "none",
-                }}>Click To Reveal The Date</span>
-              </button>
-            </motion.div>
+              <span style={{
+                fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
+                fontSize:      "clamp(11px,3vw,14px)",
+                fontWeight:    700,
+                letterSpacing: "0.08em",
+                color:         "#3d2804",
+                userSelect:    "none",
+              }}>Click To Reveal The Date</span>
+            </motion.button>
           ) : (
             <motion.div
               key="date-revealed"
