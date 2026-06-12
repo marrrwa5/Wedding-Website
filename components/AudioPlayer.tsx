@@ -1,23 +1,44 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 
-interface Props { started: boolean; }
-
-export default function AudioPlayer({ started }: Props) {
+export default function AudioPlayer() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [muted, setMuted] = useState(false);
+  const played = useRef(false);
 
-  useEffect(() => {
-    if (!started) return;
+  const tryPlay = () => {
+    if (played.current) return;
     const audio = audioRef.current;
     if (!audio) return;
     audio.volume = 0.45;
     audio.playbackRate = 1.1;
     audio.loop = true;
     audio.muted = false;
-    setMuted(false);
-    audio.play().catch(() => {});
-  }, [started]);
+    audio.play().then(() => {
+      played.current = true;
+    }).catch(() => {
+      // Browser blocked autoplay — will retry on first interaction
+    });
+  };
+
+  useEffect(() => {
+    // Attempt immediately on mount
+    tryPlay();
+
+    // Fallback: start on first user interaction (covers browser autoplay blocks)
+    const onInteract = () => {
+      tryPlay();
+    };
+    document.addEventListener("click",      onInteract, { once: true });
+    document.addEventListener("touchstart", onInteract, { once: true });
+    document.addEventListener("keydown",    onInteract, { once: true });
+
+    return () => {
+      document.removeEventListener("click",      onInteract);
+      document.removeEventListener("touchstart", onInteract);
+      document.removeEventListener("keydown",    onInteract);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const toggleMute = () => {
     const audio = audioRef.current;
@@ -31,16 +52,15 @@ export default function AudioPlayer({ started }: Props) {
   return (
     <>
       <audio ref={audioRef} src="/music/wedding.mp4" preload="auto" />
-      {/* Small mute toggle — no banner, no prompt */}
       <button
         onClick={toggleMute}
         className="fixed right-5 z-[60] w-9 h-9 rounded-full flex items-center justify-center transition-all duration-300"
         style={{
-          bottom: "62px",
-          background: "rgba(11,40,24,0.65)",
-          border: "1px solid rgba(198,149,27,0.35)",
+          bottom:         "62px",
+          background:     "rgba(11,40,24,0.65)",
+          border:         "1px solid rgba(198,149,27,0.35)",
           backdropFilter: "blur(12px)",
-          color: "#E8C547",
+          color:          "#E8C547",
         }}
         aria-label={muted ? "Unmute" : "Mute"}
       >

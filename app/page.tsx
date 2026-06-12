@@ -13,7 +13,6 @@ type Phase = "paper" | "prose" | "gate" | "names";
 
 export default function Home() {
   const [phase, setPhase] = useState<Phase>("paper");
-  const [musicStarted, setMusicStarted] = useState(false);
   const go = (next: Phase) => setPhase(next);
 
   return (
@@ -33,7 +32,7 @@ export default function Home() {
         />
       </div>
 
-      <AudioPlayer started={musicStarted} />
+      <AudioPlayer />
 
       {/* ── PaperSection — only in paper phase ── */}
       <AnimatePresence>
@@ -41,7 +40,6 @@ export default function Home() {
           <PaperSection
             key="paper"
             onOpen={() => go("prose")}
-            onTap={() => setMusicStarted(true)}
           />
         )}
       </AnimatePresence>
