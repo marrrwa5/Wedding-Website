@@ -1,7 +1,7 @@
 "use client";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import WeddingEvents from "@/components/WeddingEvents";
 
 /* ═══════════════════════════════════════════════════════════
@@ -104,117 +104,11 @@ function PremiumCountdown() {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   SCRATCH CARD
-   ─ Multiple natural gestures required (no auto-trigger)
-   ─ Each stroke clearly visible — full-opacity destination-out
-   ─ lineWidth 36 gives natural feel without being huge
-   ─ Auto-complete only after 70% is scratched
-   ─ Luxury ivory/champagne gift-box canvas
+   CLICK-TO-REVEAL DATE CARD
 ═══════════════════════════════════════════════════════════ */
-function ScratchCard({ onDone }: { onDone: () => void }) {
-  const canvasRef      = useRef<HTMLCanvasElement>(null);
-  const isDrawing      = useRef(false);
-  const prevPos        = useRef<{x:number;y:number}|null>(null);
-  const autoStarted    = useRef(false);
-  const revealDone     = useRef(false);
-  const confettiFired  = useRef(false);
-  const rafRef         = useRef<number|null>(null);
-  const scratchCount   = useRef(0);
-  const paintMeter     = useRef(0);
-  const lW             = useRef(210);   /* logical width  */
-  const LH             = 50;            /* logical height */
-  const [revealed,    setRevealed]    = useState(false);
-  const [labelHidden, setLabelHidden] = useState(false);
-
-  const initCanvas = useCallback(() => {
-    const cv = canvasRef.current; if (!cv) return;
-    const ctx = cv.getContext("2d"); if (!ctx) return;
-    const w = lW.current, h = LH;
-    ctx.clearRect(0, 0, w, h);
-
-    /* Warm champagne-ivory gradient */
-    const g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0,    "#FAF2DE");
-    g.addColorStop(0.22, "#EFDA90");
-    g.addColorStop(0.5,  "#FAF0D0");
-    g.addColorStop(0.75, "#E8D090");
-    g.addColorStop(1,    "#F5ECD8");
-    ctx.fillStyle = g;
-    ctx.fillRect(0, 0, w, h);
-
-    /* Fine cross-hatch texture */
-    ctx.strokeStyle = "rgba(120,85,12,0.04)";
-    ctx.lineWidth   = 0.5;
-    for (let i = -h; i < w + h; i += 5) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i+h, h); ctx.stroke();
-    }
-    for (let i = w+h; i > -h; i -= 5) {
-      ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i-h, h); ctx.stroke();
-    }
-
-    /* Pearl radial highlight */
-    const hi = ctx.createRadialGradient(w*.35, h*.3, 0, w*.5, h*.5, w*.7);
-    hi.addColorStop(0, "rgba(255,253,240,0.5)");
-    hi.addColorStop(1, "rgba(0,0,0,0.04)");
-    ctx.fillStyle = hi;
-    ctx.fillRect(0, 0, w, h);
-
-
-    /* Instruction text — small, bold, sans-serif */
-    ctx.textAlign   = "center";
-    ctx.globalAlpha = 1;
-    const fs = Math.floor(w * 0.036);
-    ctx.font        = `bold ${fs}px Arial, Helvetica, sans-serif`;
-    ctx.fillStyle   = "rgba(35,20,0,0.72)";
-    ctx.fillText("Scratch to Reveal the Date", w/2, h/2 + fs * 0.4);
-  }, []);
-
-  useEffect(() => {
-    const cv = canvasRef.current; if (!cv) return;
-    const w = Math.min(window.innerWidth - 48, 210);
-    const h = LH;
-    const dpr = window.devicePixelRatio || 1;
-    lW.current = w;
-    /* Retina-quality canvas: internal size = logical × DPR */
-    cv.width  = w * dpr;
-    cv.height = h * dpr;
-    cv.style.width  = w + "px";
-    cv.style.height = h + "px";
-    const ctx = cv.getContext("2d")!;
-    ctx.scale(dpr, dpr);  /* draw in logical CSS pixels from here on */
-    initCanvas();
-    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [initCanvas]);
-
-  const getCoverage = () => {
-    const cv = canvasRef.current; if (!cv) return 0;
-    const ctx = cv.getContext("2d"); if (!ctx) return 0;
-    const d = ctx.getImageData(0,0,cv.width,cv.height).data;
-    let clear = 0;
-    for (let i = 3; i < d.length; i += 16) if (d[i] === 0) clear++;
-    return (clear / (cv.width * cv.height / 4)) * 100;
-  };
-
-  const autoComplete = () => {
-    if (autoStarted.current) return;
-    autoStarted.current = true;
-    const cv  = canvasRef.current; if (!cv) return;
-    const ctx = cv.getContext("2d"); if (!ctx) return;
-    const cx  = lW.current / 2, cy = LH / 2;
-    const maxR = Math.sqrt(cx**2 + cy**2) + 4;
-    const dur  = 480, start = performance.now();
-    const step = (now: number) => {
-      const ease = 1 - (1 - Math.min((now-start)/dur, 1))**3;
-      ctx.globalAlpha              = 1;
-      ctx.globalCompositeOperation = "destination-out";
-      ctx.beginPath();
-      ctx.arc(cx, cy, maxR * ease, 0, Math.PI*2);
-      ctx.fill();
-      if (ease < 1) { rafRef.current = requestAnimationFrame(step); }
-      else { triggerReveal(); }
-    };
-    rafRef.current = requestAnimationFrame(step);
-  };
+function ScratchCard({ onDone: _onDone }: { onDone: () => void }) {
+  const [revealed,     setRevealed]     = useState(false);
+  const confettiFired                   = useRef(false);
 
   const fireConfetti = () => {
     if (confettiFired.current) return;
@@ -222,15 +116,12 @@ function ScratchCard({ onDone }: { onDone: () => void }) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const confetti = require("canvas-confetti").default;
-      confetti({ particleCount: 80, angle: 60, spread: 55,
-        origin: { x: 0.1, y: 0.7 },
-        colors: ["#C6951B","#EDD060","#F5E07A","#E7D7C9","#5D7B3A"] });
+      confetti({ particleCount: 80, angle: 60,  spread: 55,
+        origin: { x: 0.1, y: 0.7 }, colors: ["#C6951B","#EDD060","#F5E07A","#E7D7C9","#5D7B3A"] });
       confetti({ particleCount: 80, angle: 120, spread: 55,
-        origin: { x: 0.9, y: 0.7 },
-        colors: ["#C6951B","#EDD060","#F5E07A","#E7D7C9","#5D7B3A"] });
+        origin: { x: 0.9, y: 0.7 }, colors: ["#C6951B","#EDD060","#F5E07A","#E7D7C9","#5D7B3A"] });
       setTimeout(() => confetti({ particleCount: 60, spread: 80,
-        origin: { x: 0.5, y: 0.6 },
-        colors: ["#C6951B","#EDD060","#ffffff","#E7D7C9"] }), 200);
+        origin: { x: 0.5, y: 0.6 }, colors: ["#C6951B","#EDD060","#ffffff","#E7D7C9"] }), 200);
     } catch {}
   };
 
@@ -238,143 +129,40 @@ function ScratchCard({ onDone }: { onDone: () => void }) {
     try {
       // eslint-disable-next-line @typescript-eslint/no-require-imports
       const confetti = require("canvas-confetti").default;
-      const scalar   = 2;
-      const emojis   = ["🎉","💍","💕","✨","🌸","🎊","💫","🥂"];
-      const shapes   = emojis.map((e) => confetti.shapeFromText({ text: e, scalar }));
-      const colors   = ["#C6951B","#EDD060","#FF9DC4","#B8E0D2","#ffffff","#F5E07A"];
-
-      /* Wave 1 — emoji shower from top-centre */
+      const scalar = 2;
+      const emojis = ["🎉","💍","💕","✨","🌸","🎊","💫","🥂"];
+      const shapes = emojis.map((e) => confetti.shapeFromText({ text: e, scalar }));
+      const colors = ["#C6951B","#EDD060","#FF9DC4","#B8E0D2","#ffffff","#F5E07A"];
       confetti({ particleCount: 32, spread: 90, origin: { x: 0.5, y: 0 },
         shapes, scalar, gravity: 0.55, ticks: 280, drift: 0.4 });
-
-      /* Wave 2 — coloured squares + circles left & right */
       setTimeout(() => {
-        confetti({ particleCount: 55, angle: 65, spread: 50,
+        confetti({ particleCount: 55, angle: 65,  spread: 50,
           origin: { x: 0.05, y: 0.6 }, colors, gravity: 0.7, ticks: 220 });
         confetti({ particleCount: 55, angle: 115, spread: 50,
           origin: { x: 0.95, y: 0.6 }, colors, gravity: 0.7, ticks: 220 });
       }, 300);
-
-      /* Wave 3 — emoji + circle centre burst */
       setTimeout(() => {
         confetti({ particleCount: 28, spread: 120, origin: { x: 0.5, y: 0.45 },
           shapes, scalar, gravity: 0.5, ticks: 300, drift: 0.6 });
         confetti({ particleCount: 40, spread: 100, origin: { x: 0.5, y: 0.5 },
           colors, gravity: 0.65, ticks: 240 });
       }, 650);
-
     } catch {}
   };
 
-  const getProgress = (): number => {
-    const cv = canvasRef.current;
-    const ctx = cv?.getContext("2d");
-    if (!cv || !ctx) return 0;
-    const { data } = ctx.getImageData(0, 0, cv.width, cv.height);
-    let cleared = 0;
-    for (let i = 3; i < data.length; i += 32) { if (data[i] < 128) cleared++; }
-    return cleared / (data.length / 32);
-  };
-
-  const triggerReveal = () => {
-    if (revealDone.current) return;
-    revealDone.current = true;
+  const handleClick = () => {
+    if (revealed) return;
     setRevealed(true);
-    setLabelHidden(true);
-    /* onDone intentionally not called — scratch box stays visible */
+    fireConfetti();
+    fireParty();
   };
-
-
-  /* Soft radial-gradient brush — erases with feathered edges */
-  const paintAt = (ctx: CanvasRenderingContext2D, x: number, y: number) => {
-    const r = Math.round(lW.current * 0.22); // 22% of card width per brush stamp
-    const g = ctx.createRadialGradient(x, y, 0, x, y, r);
-    g.addColorStop(0,   "rgba(0,0,0,1)");
-    g.addColorStop(0.7, "rgba(0,0,0,1)");
-    g.addColorStop(1,   "rgba(0,0,0,0)");
-    ctx.globalCompositeOperation = "destination-out";
-    ctx.globalAlpha = 1;
-    ctx.fillStyle = g;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  };
-
-  const scratch = (x: number, y: number) => {
-    if (revealDone.current || autoStarted.current) return;
-    const cv = canvasRef.current; if (!cv) return;
-    const ctx = cv.getContext("2d"); if (!ctx) return;
-
-    if (prevPos.current) {
-      /* Interpolate densely so fast drags leave no gaps */
-      const { x: px, y: py } = prevPos.current;
-      const dx = x - px, dy = y - py;
-      const dist = Math.sqrt(dx*dx + dy*dy);
-      const step = Math.max(lW.current * 0.04, 2); // stamp every 4% of width — no gaps
-      const n = Math.max(Math.ceil(dist / step), 1);
-      for (let i = 0; i <= n; i++) {
-        paintAt(ctx, px + dx*(i/n), py + dy*(i/n));
-      }
-    } else {
-      paintAt(ctx, x, y);
-      scratchCount.current += 1;
-    }
-    prevPos.current = { x, y };
-
-    /* Check progress every 10 paints — fire at 90% */
-    paintMeter.current += 1;
-    if (paintMeter.current % 10 === 0 && !confettiFired.current) {
-      if (getProgress() >= 0.90) {
-        fireConfetti();
-        fireParty();
-        autoComplete();
-      }
-    }
-  };
-
-  /* Pointer Events — unifies mouse + touch, setPointerCapture keeps tracking outside element */
-  useEffect(() => {
-    const cv = canvasRef.current; if (!cv) return;
-
-    const pos = (e: PointerEvent) => {
-      const r = cv.getBoundingClientRect();
-      return { x: e.clientX - r.left, y: e.clientY - r.top };
-    };
-
-    const onDown = (e: PointerEvent) => {
-      e.preventDefault();
-      cv.setPointerCapture(e.pointerId);
-      isDrawing.current = true;
-      prevPos.current = null;
-      const p = pos(e); scratch(p.x, p.y);
-    };
-    const onMove = (e: PointerEvent) => {
-      if (!isDrawing.current) return;
-      e.preventDefault();
-      const p = pos(e); scratch(p.x, p.y);
-    };
-    const onUp = () => { isDrawing.current = false; prevPos.current = null; };
-
-    cv.addEventListener("pointerdown",   onDown);
-    cv.addEventListener("pointermove",   onMove);
-    cv.addEventListener("pointerup",     onUp);
-    cv.addEventListener("pointercancel", onUp);
-
-    return () => {
-      cv.removeEventListener("pointerdown",   onDown);
-      cv.removeEventListener("pointermove",   onMove);
-      cv.removeEventListener("pointerup",     onUp);
-      cv.removeEventListener("pointercancel", onUp);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <div style={{ textAlign: "center" }}>
 
-      {/* SAVE THE DATE — large focal point above the box */}
+      {/* Save the Date label */}
       <AnimatePresence>
-        {!labelHidden && (
+        {!revealed && (
           <motion.div
             exit={{ opacity: 0, transition: { duration: 0.3 } }}
             style={{ marginBottom: "16px" }}
@@ -387,67 +175,92 @@ function ScratchCard({ onDone }: { onDone: () => void }) {
               textTransform: "uppercase",
               color:         "rgba(185,140,28,0.92)",
               lineHeight:    1,
-            }}>
-              Save the Date
-            </p>
+            }}>Save the Date</p>
             <div style={{
-              width:      "40px", height: "1px",
+              width: "40px", height: "1px",
               background: "linear-gradient(to right,transparent,rgba(232,197,71,0.4),transparent)",
-              margin:     "8px auto 0",
+              margin: "8px auto 0",
             }} />
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Rounded-rect scratch box */}
-      <div style={{
-        position:     "relative",
-        width:        "min(210px,calc(100vw - 48px))",
-        height:       "50px",
-        borderRadius: "25px",
-        overflow:     "hidden",
-        margin:       "0 auto",
-        border:       "1px solid rgba(198,149,27,0.35)",
-        boxShadow:
-          "0 0 0 1px rgba(198,149,27,0.08), " +
-          "0 12px 36px rgba(0,0,0,0.48), " +
-          "inset 0 1px 0 rgba(255,242,155,0.18)",
-      }}>
-        {/* Revealed interior */}
-        <div style={{
-          position:       "absolute", inset: 0,
-          display:        "flex", alignItems: "center", justifyContent: "center",
-          background:     "linear-gradient(160deg,#2D0A0A 0%,#5C1212 55%,#2D0A0A 100%)",
-        }}>
-          <p style={{
-            fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
-            fontSize:      "clamp(13px,3.8vw,18px)",
-            fontWeight:    700,
-            letterSpacing: "0.1em",
-            lineHeight:    1,
-            color:         "#E8C547",
-          }}>
-            25 November 2026
-          </p>
-        </div>
-
-        {/* Ivory foil */}
-        <AnimatePresence>
-          {!revealed && (
-            <motion.canvas
-              ref={canvasRef}
-              exit={{ opacity: 0, transition: { duration: 0.4 } }}
-              style={{
-                position: "absolute", inset: 0,
-                width: "100%", height: "100%",
-                cursor: "crosshair",
-              }}
-            />
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* scratch hint removed — instruction text is drawn on the canvas itself */}
+      {/* Click button → revealed date */}
+      <AnimatePresence mode="wait">
+        {!revealed ? (
+          <motion.button
+            key="click-box"
+            onClick={handleClick}
+            style={{
+              width:          "min(210px,calc(100vw - 48px))",
+              height:         "50px",
+              borderRadius:   "25px",
+              display:        "flex",
+              alignItems:     "center",
+              justifyContent: "center",
+              cursor:         "pointer",
+              background:     "linear-gradient(135deg,#C6951B 0%,#e8b84b 35%,#FFE08A 55%,#C6951B 100%)",
+              border:         "1px solid rgba(198,149,27,0.7)",
+              userSelect:     "none",
+            }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{
+              opacity: 1,
+              scale:   1,
+              boxShadow: [
+                "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
+                "0 0 0 1px rgba(198,149,27,0.08),0 8px 40px rgba(198,149,27,0.6)",
+                "0 0 0 1px rgba(198,149,27,0.08),0 8px 24px rgba(198,149,27,0.3)",
+              ],
+            }}
+            exit={{ scale: 1.08, opacity: 0, transition: { duration: 0.25 } }}
+            transition={{
+              opacity: { duration: 0.4 },
+              scale:   { duration: 0.4 },
+              boxShadow: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+            }}
+            whileTap={{ scale: 0.96 }}
+          >
+            <span style={{
+              fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
+              fontSize:      "clamp(11px,3vw,14px)",
+              fontWeight:    700,
+              letterSpacing: "0.08em",
+              color:         "#3d2804",
+              userSelect:    "none",
+            }}>Click to reveal the date ✨</span>
+          </motion.button>
+        ) : (
+          <motion.div
+            key="date-revealed"
+            style={{
+              width:          "min(210px,calc(100vw - 48px))",
+              height:         "50px",
+              borderRadius:   "25px",
+              margin:         "0 auto",
+              border:         "1px solid rgba(198,149,27,0.35)",
+              boxShadow:      "0 0 0 1px rgba(198,149,27,0.08),0 12px 36px rgba(0,0,0,0.48)",
+              display:        "flex",
+              alignItems:     "center",
+              justifyContent: "center",
+              background:     "linear-gradient(160deg,#2D0A0A 0%,#5C1212 55%,#2D0A0A 100%)",
+            }}
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
+          >
+            <p style={{
+              fontFamily:    "var(--font-playfair,'Playfair Display',Georgia,serif)",
+              fontSize:      "clamp(13px,3.8vw,18px)",
+              fontWeight:    700,
+              letterSpacing: "0.1em",
+              lineHeight:    1,
+              color:         "#E8C547",
+              margin:        0,
+            }}>25 November 2026</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
