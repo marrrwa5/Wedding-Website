@@ -56,7 +56,7 @@ export default function PaperSection({ onOpen }: Props) {
         animate={{ opacity: tapped ? 0 : 1 }}
         transition={{ duration: 0.35 }}
         style={{
-          bottom:      "12%",
+          bottom:      "20%",
           left:        "50%",
           transform:   "translateX(-50%)",
           textAlign:   "center",
@@ -95,7 +95,7 @@ export default function PaperSection({ onOpen }: Props) {
             fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
             fontSize:      "clamp(15px, 4vw, 22px)",
             fontWeight:    600,
-            color:         "#C07848",
+            color:         "#9A5530",
             letterSpacing: "0.18em",
             textTransform: "uppercase",
             margin:        0,
