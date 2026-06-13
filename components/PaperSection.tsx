@@ -50,7 +50,7 @@ export default function PaperSection({ onOpen }: Props) {
         onPlay={e => { if (!triggered.current) e.currentTarget.pause(); }}
       />
 
-      {/* All text — one group, fades out the moment user taps */}
+      {/* All text — one group, fades out on tap */}
       <motion.div
         className="absolute pointer-events-none"
         animate={{ opacity: tapped ? 0 : 1 }}
@@ -65,52 +65,44 @@ export default function PaperSection({ onOpen }: Props) {
           paddingLeft: "28px", paddingRight: "28px",
         }}
       >
-        {/* Line 1 */}
+        {/* "You Are Invited" — original brown, bold */}
         <p style={{
           fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
-          fontSize:      "clamp(13px, 3.8vw, 19px)",
-          fontWeight:    600,
-          color:         "rgba(198,149,27,0.88)",
-          letterSpacing: "0.22em",
+          fontSize:      "clamp(15px, 4vw, 22px)",
+          fontWeight:    700,
+          color:         "#7B4B2A",
+          letterSpacing: "0.18em",
           textTransform: "uppercase",
           margin:        0,
-          lineHeight:    1.5,
+          lineHeight:    1.35,
           userSelect:    "none",
         }}>
           You Are Invited To Our Special Day
         </p>
 
-        {/* Thin gold divider */}
-        <div style={{
-          width:      "48px",
-          height:     "1px",
-          background: "linear-gradient(to right, transparent, rgba(198,149,27,0.6), transparent)",
-          margin:     "12px auto",
-        }} />
+        {/* ──────◆────── divider */}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", margin: "14px auto" }}>
+          <div style={{ width: "52px", height: "1px", background: "linear-gradient(to right, transparent, #A0622A)" }} />
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <rect x="1" y="1" width="8" height="8" transform="rotate(45 5 5)" fill="#A0622A" />
+          </svg>
+          <div style={{ width: "52px", height: "1px", background: "linear-gradient(to left, transparent, #A0622A)" }} />
+        </div>
 
-        {/* Bouncing finger */}
-        <motion.div
-          style={{ fontSize: "clamp(22px, 6vw, 30px)", lineHeight: 1, userSelect: "none", marginBottom: "8px" }}
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-        >
-          👆
-        </motion.div>
-
-        {/* Tap CTA — same family, lighter weight, same size */}
+        {/* "Tap To Open" — slightly lighter brown, same font */}
         <motion.p
           style={{
             fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
-            fontSize:      "clamp(13px, 3.8vw, 19px)",
-            fontWeight:    500,
-            color:         "rgba(232,197,71,0.9)",
-            letterSpacing: "0.22em",
+            fontSize:      "clamp(15px, 4vw, 22px)",
+            fontWeight:    600,
+            color:         "#C07848",
+            letterSpacing: "0.18em",
             textTransform: "uppercase",
             margin:        0,
-            lineHeight:    1.5,
+            lineHeight:    1.35,
             userSelect:    "none",
           }}
-          animate={{ opacity: [0.6, 1, 0.6] }}
+          animate={{ opacity: [0.75, 1, 0.75] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
           Tap To Open The Invitation
