@@ -50,13 +50,13 @@ export default function PaperSection({ onOpen }: Props) {
         onPlay={e => { if (!triggered.current) e.currentTarget.pause(); }}
       />
 
-      {/* "You Are Invited" — fades out when zooming starts */}
+      {/* All text — one group, fades out the moment user taps */}
       <motion.div
         className="absolute pointer-events-none"
-        animate={{ opacity: zooming ? 0 : 1 }}
-        transition={{ duration: 0.5 }}
+        animate={{ opacity: tapped ? 0 : 1 }}
+        transition={{ duration: 0.35 }}
         style={{
-          bottom:      "26%",
+          bottom:      "12%",
           left:        "50%",
           transform:   "translateX(-50%)",
           textAlign:   "center",
@@ -65,68 +65,52 @@ export default function PaperSection({ onOpen }: Props) {
           paddingLeft: "28px", paddingRight: "28px",
         }}
       >
+        {/* Line 1 */}
         <p style={{
           fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
-          fontSize:      "clamp(15px, 4vw, 22px)",
-          fontWeight:    700,
-          color:         "#7B4B2A",
-          letterSpacing: "0.18em",
+          fontSize:      "clamp(13px, 3.8vw, 19px)",
+          fontWeight:    600,
+          color:         "rgba(198,149,27,0.88)",
+          letterSpacing: "0.22em",
           textTransform: "uppercase",
           margin:        0,
-          lineHeight:    1.35,
+          lineHeight:    1.5,
+          userSelect:    "none",
         }}>
-          You Are Invited To Our
+          You Are Invited To Our Special Day
         </p>
-        <p style={{
-          fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
-          fontSize:      "clamp(15px, 4vw, 22px)",
-          fontWeight:    700,
-          color:         "#7B4B2A",
-          letterSpacing: "0.18em",
-          textTransform: "uppercase",
-          margin:        "3px 0 0",
-          lineHeight:    1.35,
-        }}>
-          Special Day
-        </p>
-      </motion.div>
 
-      {/* "Tap To Open" CTA — fades out immediately on tap */}
-      <motion.div
-        className="absolute pointer-events-none"
-        animate={{ opacity: tapped ? 0 : 1 }}
-        transition={{ duration: 0.35 }}
-        style={{
-          bottom:    "7%",
-          left:      "50%",
-          transform: "translateX(-50%)",
-          textAlign: "center",
-          zIndex:    5,
-          width:     "100%",
-        }}
-      >
+        {/* Thin gold divider */}
+        <div style={{
+          width:      "48px",
+          height:     "1px",
+          background: "linear-gradient(to right, transparent, rgba(198,149,27,0.6), transparent)",
+          margin:     "12px auto",
+        }} />
+
         {/* Bouncing finger */}
         <motion.div
-          style={{ fontSize: "clamp(26px, 7vw, 36px)", lineHeight: 1, userSelect: "none" }}
-          animate={{ y: [0, -10, 0] }}
+          style={{ fontSize: "clamp(22px, 6vw, 30px)", lineHeight: 1, userSelect: "none", marginBottom: "8px" }}
+          animate={{ y: [0, -8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         >
           👆
         </motion.div>
 
-        {/* Pulsing label */}
+        {/* Tap CTA — same family, lighter weight, same size */}
         <motion.p
           style={{
             fontFamily:    "var(--font-playfair), 'Playfair Display', Georgia, serif",
-            fontSize:      "clamp(12px, 3.4vw, 17px)",
-            fontWeight:    600,
-            color:         "rgba(232,197,71,0.92)",
-            letterSpacing: "0.2em",
+            fontSize:      "clamp(13px, 3.8vw, 19px)",
+            fontWeight:    500,
+            color:         "rgba(232,197,71,0.9)",
+            letterSpacing: "0.22em",
             textTransform: "uppercase",
-            margin:        "10px 0 0",
+            margin:        0,
+            lineHeight:    1.5,
             userSelect:    "none",
           }}
-          animate={{ opacity: [0.65, 1, 0.65] }}
+          animate={{ opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
           Tap To Open The Invitation
