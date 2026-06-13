@@ -56,7 +56,7 @@ export default function PaperSection({ onOpen }: Props) {
         animate={{ opacity: tapped ? 0 : 1 }}
         transition={{ duration: 0.35 }}
         style={{
-          bottom:      "20%",
+          bottom:      "15%",
           left:        "50%",
           transform:   "translateX(-50%)",
           textAlign:   "center",
