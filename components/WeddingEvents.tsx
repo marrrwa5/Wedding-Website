@@ -723,6 +723,18 @@ function ClosingSection() {
             fontFamily:    "system-ui, Arial, Helvetica, sans-serif",
             fontSize:      "clamp(15px,4vw,20px)",
             fontWeight:    400,
+            fontStyle:     "italic",
+            color:         "#2C1A08",
+            letterSpacing: "0em",
+            lineHeight:    1.5,
+            margin:        "2px 0 0",
+          }}>
+            Fatema Shk. Mohammed Hussain Asif
+          </p>
+          <p style={{
+            fontFamily:    "system-ui, Arial, Helvetica, sans-serif",
+            fontSize:      "clamp(15px,4vw,20px)",
+            fontWeight:    400,
             color:         "#2C1A08",
             letterSpacing: "0em",
             lineHeight:    1.5,

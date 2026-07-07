@@ -23,7 +23,10 @@ export default function GateVideo({ onDone }: Props) {
 
     const onTime = () => { if (v.currentTime >= 4) triggerExit(); };
     v.addEventListener("timeupdate", onTime);
-    return () => v.removeEventListener("timeupdate", onTime);
+    // Safety net — don't let a stalled/buffering video on a slow connection
+    // block the flow forever.
+    const safety = setTimeout(triggerExit, 4500);
+    return () => { v.removeEventListener("timeupdate", onTime); clearTimeout(safety); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

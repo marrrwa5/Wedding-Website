@@ -270,6 +270,35 @@ function ScratchCard({ onDone: _onDone }: { onDone: () => void }) {
 }
 
 /* ═══════════════════════════════════════════════════════════
+   SCROLL HINT — pointing hand + down arrow
+═══════════════════════════════════════════════════════════ */
+function ScrollHint({ style }: { style?: React.CSSProperties }) {
+  const DARK_GREEN = "#1B5E3B";
+  return (
+    <motion.div
+      style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1px", ...style }}
+      animate={{ y: [0, 8, 0] }}
+      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+    >
+      <span style={{
+        fontFamily:    "system-ui, Arial, Helvetica, sans-serif",
+        fontSize:      "11px",
+        fontWeight:    600,
+        letterSpacing: "0.14em",
+        textTransform: "uppercase",
+        color:         DARK_GREEN,
+      }}>
+        Scroll Down
+      </span>
+      <svg width="14" height="24" viewBox="0 0 24 34" fill="none" style={{ marginTop: "2px" }}
+        stroke={DARK_GREEN} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2v24M5 19l7 7 7-7" />
+      </svg>
+    </motion.div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════════
    NAMES REVEAL — main component
 ═══════════════════════════════════════════════════════════ */
 export default function NamesReveal() {
@@ -488,6 +517,9 @@ export default function NamesReveal() {
                 style={{ width: "min(80px,20vw)", height: "auto", objectFit: "contain" }}
               />
             </div>
+
+            {/* Scroll hint — under the logo */}
+            <ScrollHint style={{ marginTop: "34px" }} />
 
           </motion.div>
 

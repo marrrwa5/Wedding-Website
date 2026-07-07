@@ -24,10 +24,17 @@ export default function PaperSection({ onOpen }: Props) {
     v.currentTime = 0;
     const p = v.play();
 
+    let started = false;
     const afterStart = () => {
+      if (started) return;
+      started = true;
       setTimeout(() => setZooming(true), 5500);
       setTimeout(() => onOpenRef.current(), 6000);
     };
+
+    // Safety net — on a slow connection the video may stall before it can
+    // start playing; don't let that block the whole invitation flow.
+    setTimeout(afterStart, 2500);
 
     if (p !== undefined) { p.then(afterStart).catch(() => onOpenRef.current()); }
     else { afterStart(); }
