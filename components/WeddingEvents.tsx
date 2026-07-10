@@ -831,8 +831,8 @@ export default function WeddingEvents() {
         num="02" name="MEHENDI"
         date="Thursday, 26th November"
         islamic="١٧ جمادى الآخرة"
-        venue="Orchid Plaza, Juffair"
-        url="https://maps.app.goo.gl/Ei9GpGcJiYEH7VC2A?g_st=iw"
+        venue="Joy Garden, Jidhafs"
+        url="https://maps.app.goo.gl/uQJ9iU66WC4fSsth8?g_st=aw"
         sparkle={<MehendiSparkles />}
       />
 
