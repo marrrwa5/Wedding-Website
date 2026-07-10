@@ -55,8 +55,8 @@ const events: Evt[] = [
     prose: "Ghar ki riwayat se bandha yeh safar, aaj duaoon mein mehek raha hai safar",
     date: "Thursday, 26 November 2026",
     hijri: "17 Jamadal Ukhra 1448",
-    venue: "Orchid Plaza, Juffair",
-    locationUrl: "https://maps.app.goo.gl/Ei9GpGcJiYEH7VC2A",
+    venue: "Joy Garden, Jidhafs",
+    locationUrl: "https://maps.app.goo.gl/uQJ9iU66WC4fSsth8?g_st=aw",
     image: "/images/love.png", theme: "mehendi",
   },
   {
